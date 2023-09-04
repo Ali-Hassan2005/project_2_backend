@@ -2,10 +2,10 @@
 
 require_once "../config/db_connection.php";
 
-// write query
+
 $sql = "SELECT id,name,count_in_stock FROM products";
 
-// Send query to MySQL
+
 $result = mysqli_query($connection, $sql);
 
 $records = [];

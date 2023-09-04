@@ -9,14 +9,14 @@
 
     <?php
 
-    // connect to DB
-    require_once "../config/db_connection.php";
+    
 
     $id=$_GET['id'];
+    require_once "../controllers/Product.php";
+    $clientObject = new Product();
+    $resultProduct = $clientObject->details($id);
 
-    $selectProductQuery = "SELECT * FROM products WHERE id=$id";
     
-    $resultProduct = mysqli_query($connection, $selectProductQuery);
 
     $productDetails = mysqli_fetch_assoc($resultProduct);
 
@@ -59,13 +59,16 @@
             $count_in_stock = $_POST['count_in_stock'];
             $product_id = $_GET['id'];
 
-            // write query
-            $query = "UPDATE products SET name='$name',size='$size',color='$color',count_in_stock=$count_in_stock WHERE id=$product_id";
+            
+            require_once "../controllers/Product.php";
+            $clientObject = new Product();
+            $result = $clientObject->edit($name,$size,$color,$count_in_stock,$product_id);
 
-            // send query
-            mysqli_query($connection, $query);
+            if($result){
+                header("Location: index.php");
+            }
 
-            header("Location: index.php");
+            
         }
     ?>
 </body>

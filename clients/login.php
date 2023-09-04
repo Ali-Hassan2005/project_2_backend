@@ -1,3 +1,11 @@
+<?php 
+session_start();
+
+if(isset($_SESSION['id']) && $_SESSION['id']!= ""){
+    header("Location: Profile.php");
+}
+?>
+
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -25,26 +33,48 @@
     </form>
 
 
-    <?php
 
-        if(isset($_POST['username'])) {
+
+
+<?php
+
+
+
+
+    if(isset($_POST['username'])) {
+
+
             $username = $_POST['username'];
-            $password = $_POST['password'];
+            
+            $password = md5( $_POST['password']);
 
             
-            require_once "../config/db_connection.php";
+            require_once "../controllers/Client.php";
+            $clientObject = new Client();
+            $result = $clientObject->login($username, $password);
 
-            
-            $sql = "SELECT * FROM clients WHERE username='$username' AND password='$password'";
-
-            $result = mysqli_query($connection, $sql);
 
             if(mysqli_num_rows($result) > 0) {
+                $clientDetails = mysqli_fetch_assoc($result);
+
+                $_SESSION['id']=$clientDetails['id'];
+                $_SESSION['full_name']=$clientDetails['full_name'];
+                $_SESSION['email']=$clientDetails['email'];
+                $_SESSION['username']=$clientDetails['username'];
+                $_SESSION['password']=$clientDetails['password'];
+                $_SESSION['phone_number']=$clientDetails['phone_number'];
+                $_SESSION['address']=$clientDetails['address'];
+                $_SESSION['created_at']=$clientDetails['created_at'];
+                $_SESSION['updated_at']=$clientDetails['updated_at'];
+
+
+
                 header("location: ../products/index.php");
             } else {
                 echo "Check your username and password";
             }
         }
     ?>
+
 </body>
 </html>

@@ -3,11 +3,11 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Document</title>
+    <title>Create Product</title>
 </head>
 <body>
-    <p><a href='index.php'>All products</a>
-    <form action="create.php" method="post">
+    <p><a href='index.php'>All products</a></p>
+    <form action="create.php" method="post" enctype="multipart/form-data">
         <table align="center">
             <tr>
                 <th>Name:</th>
@@ -26,6 +26,10 @@
                 <td><input type="text" name="count_in_stock" /></td>
             </tr>
             <tr>
+                <th>Image:</th>
+                <td><input type="file" name="image" /></td>
+            </tr>
+            <tr>
                 <td></td>
                 <td>
                     <input type="submit" value="Save">
@@ -34,25 +38,32 @@
         </table>
     </form>
 
-
     <?php
-        if(isset($_POST['name'])) {
-            $name = $_POST['name'];
-            $size = $_POST['size'];
-            $color = $_POST['color'];
-            $count_in_stock = $_POST['count_in_stock'];
+    if(isset($_POST['name'])) {
+        $name = $_POST['name'];
+        $size = $_POST['size'];
+        $color = $_POST['color'];
+        $count_in_stock = $_POST['count_in_stock'];
 
-            // connect to DB
-            require_once "../config/db_connection.php";
+        $file_name = $_FILES['image']['name'];
+        $tmp_name = $_FILES['image']['tmp_name'];
+        $destination = "../Uploads/products/" . $file_name;
+        
+        
+        if(move_uploaded_file($tmp_name, $destination)) {
+            
+            require_once "../controllers/Product.php";
+            $clientObject = new Product();
+            $result = $clientObject->create($name, $size, $file_name, $color, $count_in_stock);
 
-            // write query
-            $query = "INSERT INTO products(name,size,color,count_in_stock) VALUES('$name', '$size', '$color', '$count_in_stock')";
-
-            // send query
-            mysqli_query($connection, $query);
-
-            header("Location: index.php");
+            if($result) {
+                
+                header("Location: index.php");
+            }
+        } else {
+            echo "File upload failed.";
         }
+    }
     ?>
 </body>
 </html>

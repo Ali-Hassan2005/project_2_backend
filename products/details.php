@@ -8,7 +8,7 @@ $clientObject = new Product();
 $result = $clientObject->details($id);
 
 if( !$result){
-  echo "no result"
+  echo "no result";
   die ;
 }
 

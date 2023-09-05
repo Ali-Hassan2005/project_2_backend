@@ -32,7 +32,7 @@ if(!isset($_SESSION['id']) && $_SESSION['id'] == ""){
 
 
     <?php
-    session_start();
+    
 
         if(isset($_SESSION['id'] )&& isset($_POST['count_in_stock'])) {
             $client_id = $_SESSION['id'];

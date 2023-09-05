@@ -1,19 +1,19 @@
 <?php
 
-require_once "DBOperations.php";
+require_once "Database.php";
 
-class Client extends DBOperations
+class Client extends Database
 {
 
     public function register($full_name, $email, $username, $password, $phone_number, $address)
     {
-        
-        $query = "INSERT INTO `clients`
-            (`full_name`, `email`, `username`, `password`, `phone_number`, `address`)
-            VALUES
-            ('$full_name', '$email', '$username', '$password', '$phone_number', '$address');";
+        $tableName='clients';
+        $fields =[
+            "full_name" => $full_name, "email" => $email, "username" => $username,
+            "password" => $password, "phone_number" => $phone_number, "address" => $address
+        ];
 
-        return $this->connect($query);
+        return $this ->INSERT($tableName,$fields);
     }
 
     //____________________________________________________________________________________________
@@ -21,10 +21,10 @@ class Client extends DBOperations
 
     public function login($username, $password)
     {
-        
-        $sql = "SELECT * FROM clients WHERE username='$username' AND password='$password'";
+        $tableName='clients';
+        $fields = "username='$username' AND password='$password'";
 
-    return $this->connect($sql);
+        return $this ->SELECT($tableName,$fields);
     }
 
     //____________________________________________________________________________________________
@@ -32,11 +32,12 @@ class Client extends DBOperations
 
     public function edit($full_name, $email,$phone_number,$address,$id)
     {
+        $tableName='clients';
+        $fields =[
+            "full_name" => $full_name, "email" => $email,
+            "phone_number" => $phone_number, "address" => $address
+        ];
         
-        $query = "UPDATE clients
-            SET full_name='$full_name', email='$email', phone_number='$phone_number', address='$address'
-            WHERE id=$id";
-
-    return $this->connect($query);
+        return $this ->UPDATE($tableName,$fields,$id);
     }
 }

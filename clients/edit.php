@@ -7,7 +7,7 @@
 </head>
 <body>
     <?php session_start(); ?>
-  
+
     <form action="edit.php" method="post">
         <table align="center">
             <tr>
@@ -45,7 +45,7 @@
             
             require_once "../controllers/Client.php";
             $clientObject = new Client();
-            $result = $clientObject->register($full_name, $email, $username, $password, $phone_number, $address);
+            $result = $clientObject->edit($full_name, $email,$phone_number,$address,$id);
 
             if($result){
             $_SESSION['full_name'] = $_POST['full_name'];
